@@ -1,21 +1,19 @@
-# Wc
+WC
+this is a program used to to count either the lines in a certain file
+the words
 
-**TODO: Add description**
+day one 
+-- enable word count
 
-## Installation
+day two
+--
+ making the program executable
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `wc` to your list of dependencies in `mix.exs`:
+ day three
 
-```elixir
-def deps do
-  [
-    {:wc, "~> 0.1.0"}
-  ]
-end
-```
+ create a charater count
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/wc>.
+ day four
 
+ write test
+ 
