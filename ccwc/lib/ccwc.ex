@@ -16,12 +16,18 @@ defmodule Ccwc do
     # |> OptionParser.parse(switches: [help: :boolean])
     # {opts, filename}
 
-    case OptionParser.parse(args, switches: [help: :boolean]) do
+    case OptionParser.parse(args,
+           switches: [help: :boolean, character_count: :boolean],
+           aliases: [h: :help, c: :character_count]
+         ) do
       # {opts, _, _} -> execute(opts)
       {opts, filename, _} ->
-        case opts[:help] do
-          true ->
+        case do
+          opts[:help] == true ->
             execute(:help)
+
+          opts[:character_count] == true ->
+            execute(:character_count)
 
           _ ->
             filename
@@ -44,13 +50,19 @@ defmodule Ccwc do
 
   # executive
   def execute(:help) do
-    IO.puts """
+    IO.puts("""
     --help
     for help
 
     ./ccwc filename
-    this will read the file 
-    """
+    this will read the file
+    """)
+  end
+
+  def execute(:character_count) do
+    IO.puts("""
+    should count the number of character that are there
+    """)
   end
 
   def execute(filename) do
@@ -71,4 +83,43 @@ defmodule Ccwc do
     String.replace(file_content, "\n", "")
     |> String.replace("\r", "")
   end
+
+  # give you options of what should be counted
+  # counting every character in that file
+  def choose_option(file_content) do
+    the_option = IO.gets "enter c-> character, w- word" |> String.trim()
+
+    cond do
+      the_option == c -> character_count(file_content)
+      the_option == w -> word_count(file_content)
+
+
+    end
+  end
+
+  # this will couting each word in the list
+  def word_count(file_content) do
+    String.length(file_content)
+  end
+
+
+  def character_count(file_content) do
+    # this should count all the characters escaping including the spaces in the file
+    file_content
+    |> String.split(" ")
+    |> counting()
+
+  end
+
+  def line_count(file_content) do
+    
+  end
+
+  # this is for counting each character in the list
+  def counting([]), do: 0
+  def counting(list_content) do
+    [head | tail] = list_content
+    head + counting(tail)
+  end
+
 end
