@@ -7,6 +7,7 @@ defmodule Ccwc do
   def main(args \\ []) do
     args
     |> parse_args()
+    |> out_put()
   end
 
   # this is for parsing arg
@@ -16,35 +17,47 @@ defmodule Ccwc do
     # |> OptionParser.parse(switches: [help: :boolean])
     # {opts, filename}
 
-    case OptionParser.parse(args,
-           switches: [help: :boolean, character_count: :boolean],
-           aliases: [h: :help, c: :character_count]
-         ) do
-      # {opts, _, _} -> execute(opts)
-      {opts, filename, _} ->
-        case do
-          opts[:help] == true ->
-            execute(:help)
+    # case OptionParser.parse(args,
+    #        switches: [help: :boolean, character_count: :boolean],
+    #        aliases: [h: :help, c: :character_count]
+    #      ) do
+    #   # {opts, _, _} -> execute(opts)
+    #   {opts, filename, _} ->
+    #     case do
+    #       opts[:help] == true ->
+    #         execute(:help)
 
-          opts[:character_count] == true ->
-            execute(:character_count)
+    #       opts[:character_count] == true ->
+    #         execute(:character_count)
 
-          _ ->
-            filename
-            |> List.to_string()
-            |> execute()
-        end
+    #       _ ->
+    #         filename
+    #         |> List.to_string()
+    #         |> execute()
+    #     end
 
-      _ ->
-        IO.puts("check you input")
-    end
+    #   _ ->
+    #     IO.puts("check you input")
+    # end
+
+    # the corrected version
+    {opts, filename, _} =
+      args
+      |> OptionParser.parse(
+        switches: [help: :boolean, character: :boolean],
+        aliases: [h: :help, c: :character]
+      )
+
+    {opts, List.to_string(filename)}
   end
 
   # this used to proocess the incomming args from the parse
   def out_put(cmd_args) do
+    IO.inspect(cmd_args)
     case cmd_args do
-      {[:help, true], _, _} -> :help
-      _ -> IO.puts(" there is an error in the input")
+      {[help: true], _} -> execute(:help)
+      {[character: true], filename} -> execute(:character, filename)
+      _-> IO.puts("this is for other wise")
     end
   end
 
@@ -59,17 +72,20 @@ defmodule Ccwc do
     """)
   end
 
-  def execute(:character_count) do
-    IO.puts("""
-    should count the number of character that are there
-    """)
+  def execute(:character, filename) do
+
+  formatted_file = filename
+    |> file_formating()
+
+    character_count(formatted_file)
+
   end
 
-  def execute(filename) do
+  def file_formating(filename) do
     filename
     |> read_file()
     |> format_content()
-    |> IO.puts()
+ 
   end
 
   def read_file(filename) do
@@ -87,13 +103,11 @@ defmodule Ccwc do
   # give you options of what should be counted
   # counting every character in that file
   def choose_option(file_content) do
-    the_option = IO.gets "enter c-> character, w- word" |> String.trim()
+    the_option = IO.gets("enter c-> character, w- word" |> String.trim())
 
     cond do
-      the_option == c -> character_count(file_content)
-      the_option == w -> word_count(file_content)
-
-
+      the_option == "c" -> character_count(file_content)
+      the_option == "w" -> word_count(file_content)
     end
   end
 
@@ -102,24 +116,20 @@ defmodule Ccwc do
     String.length(file_content)
   end
 
-
   def character_count(file_content) do
     # this should count all the characters escaping including the spaces in the file
     file_content
     |> String.split(" ")
     |> counting()
-
   end
 
-  def line_count(file_content) do
-    
-  end
+  # def line_count(file_co/)
 
   # this is for counting each character in the list
   def counting([]), do: 0
+
   def counting(list_content) do
     [head | tail] = list_content
     head + counting(tail)
   end
-
 end
