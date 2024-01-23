@@ -16,7 +16,7 @@ defmodule Client do
     end
 
     #  url ---> then fetch the data 
-    #  return the current 
+    #  return the current status of the data
 
     def send_data(socket, message) do
         :gen_tcp.send(socket, message)
