@@ -9,6 +9,7 @@ defmodule Client do
       {:ok, socket} ->
         IO.puts("connected to server at port")
         send_data(socket, message)
+        receive_resp(socket)
 
       {:error, reason} ->
         IO.inspect(reason)
@@ -21,6 +22,13 @@ defmodule Client do
   def send_data(socket, message) do
     :gen_tcp.send(socket, message)
     IO.puts("sent the message to server #{message}")
-    :gen_tcp.close(socket)
+    # :gen_tcp.close(socket)
+  end
+
+  def receive_resp(socket) do
+ {:ok, message} = :gen_tcp.recv(socket,0)
+ IO.puts message
+ :gen_tcp.close(socket)
+
   end
 end

@@ -11,16 +11,19 @@ defmodule Server do
     {:ok, client_socket} = :gen_tcp.accept(socket)
     # should also
     receiving(client_socket)
+
     continues_connection(socket)
   end
 
+# for receiving messagees/req from client
   def receiving(client_socket) do
     {:ok, sent_data} = :gen_tcp.recv(client_socket, 0)
     fetching_data(sent_data)
+    |> send_resp(client_socket)
 
     IO.inspect(sent_data)
   end
-
+# this is used to fetch data from the url --> return it to the client
   def fetching_data(url) do
     case HTTPoison.get(url) do
       {:ok, %HTTPoison.Response{status_code: status_code, body: _body}} ->
@@ -33,4 +36,17 @@ defmodule Server do
         IO.inspect(reason)
     end
   end
+
+#   send response to the client
+    def send_resp(client_socket, message) do
+
+        
+        IO.inspect(client_socket)
+        :gen_tcp.send(client_socket, message)
+
+        IO.puts "sent the resp"
+
+        
+    end
+
 end
