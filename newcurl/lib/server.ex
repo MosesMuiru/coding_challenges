@@ -15,18 +15,21 @@ defmodule Server do
     continues_connection(socket)
   end
 
-# for receiving messagees/req from client
+  # for receiving messagees/req from client
   def receiving(client_socket) do
     {:ok, sent_data} = :gen_tcp.recv(client_socket, 0)
-    fetching_data(sent_data)
+
+{_, socket_port} = fetching_data(sent_data)
+    socket_port
     |> send_resp(client_socket)
 
     IO.inspect(sent_data)
   end
-# this is used to fetch data from the url --> return it to the client
+
+  # this is used to fetch data from the url --> return it to the client
   def fetching_data(url) do
     case HTTPoison.get(url) do
-      {:ok, %HTTPoison.Response{status_code: status_code, body: _body}} ->
+      {_, %HTTPoison.Response{status_code: status_code, body: _body}} ->
         IO.puts("status code: #{status_code}")
 
       {:ok, %HTTPoison.Response{status_code: 404}} ->
@@ -37,16 +40,18 @@ defmodule Server do
     end
   end
 
-#   send response to the client
-    def send_resp(client_socket, message) do
+  #   send response to the client
+ defp send_resp(client_socket, message) do
+  :gen_tcp.send(client_socket, message)
+  IO.puts("Sent the response")
+end
+#  def send_resp(client_socket, message) do
+#     IO.inspect(client_socket)
+#     :gen_tcp.send(client_socket, message)
 
-        
-        IO.inspect(client_socket)
-        :gen_tcp.send(client_socket, message)
+#     IO.puts("sent the resp")
 
-        IO.puts "sent the resp"
-
-        
-    end
-
+#     :gen_tcp.close()
+#   end
+  
 end
