@@ -19,7 +19,8 @@ defmodule Server do
   def receiving(client_socket) do
     {:ok, sent_data} = :gen_tcp.recv(client_socket, 0)
 
-{_, socket_port} = fetching_data(sent_data)
+    {_, socket_port} = fetching_data(sent_data)
+
     socket_port
     |> send_resp(client_socket)
 
@@ -41,17 +42,17 @@ defmodule Server do
   end
 
   #   send response to the client
- defp send_resp(client_socket, message) do
-  :gen_tcp.send(client_socket, message)
-  IO.puts("Sent the response")
-end
-#  def send_resp(client_socket, message) do
-#     IO.inspect(client_socket)
-#     :gen_tcp.send(client_socket, message)
+  defp send_resp(client_socket, message) do
+    :gen_tcp.send(client_socket, message)
+    IO.puts("Sent the response")
+  end
 
-#     IO.puts("sent the resp")
+  #  def send_resp(client_socket, message) do
+  #     IO.inspect(client_socket)
+  #     :gen_tcp.send(client_socket, message)
 
-#     :gen_tcp.close()
-#   end
-  
+  #     IO.puts("sent the resp")
+
+  #     :gen_tcp.close()
+  #   end
 end

@@ -1,4 +1,4 @@
-defmodule Newcurl do
+defmodule Newurl do
   use GenServer
 
   # def start_link(_) do
