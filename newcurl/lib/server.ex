@@ -1,5 +1,5 @@
 defmodule Server do
-  # here you insert the port which is automatically run in the supervisor 
+  # here you insert the port which is automatically run in the supervisor
   # the server should be the one sending the comback
   def connect(default_port) do
     {:ok, socket} = :gen_tcp.listen(default_port, [:binary, active: false, reuseaddr: true])
@@ -29,6 +29,7 @@ defmodule Server do
 
   # this is used to fetch data from the url --> return it to the client
   def fetching_data(url) do
+
     case HTTPoison.get(url) do
       {_, %HTTPoison.Response{status_code: status_code, body: _body}} ->
         IO.puts("status code: #{status_code}")
@@ -39,6 +40,7 @@ defmodule Server do
       {:error, %HTTPoison.Error{reason: reason}} ->
         IO.inspect(reason)
     end
+    
   end
 
   #   send response to the client
