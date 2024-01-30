@@ -5,8 +5,22 @@ defmodule CurlServer do
   end
 
   def connect do
-    {:ok, socket} = :gen_tcp.listen(80, [:binary, active: false, reuseaddr: true])
+    opts = [
+      :binary, active: false, reuseaddr: true
+    ]
+    # error handling to make sure the server port will alsways run
+    port = 5200 + 1
+    # case :gen_tcp.listen(5200, opts) do
+    #   {:ok, socket} -> accept_connection(socket)
+    #      IO.puts("port at --> #{port}")
+    #   {:error, _} -> connect()
+    #   _-> IO.puts("waah kuna shida hapa")
+
+    # end
+    {:ok, socket} = :gen_tcp.listen(5400, opts)
+    IO.inspect socket
     socket
+
   end
 
   def accept_connection(socket) do
@@ -22,6 +36,9 @@ defmodule CurlServer do
     IO.puts(data)
 
     fetching_data(data)
+    |> send_resp(socket_pid)
+
+
   end
   # after receiving a request it should send a responce to the client him self
 
@@ -37,5 +54,12 @@ defmodule CurlServer do
       {:error, %HTTPoison.Error{reason: reason}} ->
         IO.inspect(reason)
     end
-  
+  end
+    defp send_resp(fetched_data, socket_pid) do
+      IO.puts(fetched_data)
+      :gen_tcp.send(socket_pid, fetched_data)
+      :gen_tcp.close(socket_pid)
+      IO.puts("response has been sent")
+    end
+
 end
