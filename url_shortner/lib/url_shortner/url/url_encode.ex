@@ -1,6 +1,4 @@
 defmodule UrlShortner.Url.UrlEncode do
-
-
   # encoding the url
 
   # thi will produce a unicode code

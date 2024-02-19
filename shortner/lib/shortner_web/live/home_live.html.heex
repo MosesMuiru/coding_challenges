@@ -1,0 +1,14 @@
+<div>
+  <h2>Enter The Url Of You site</h2>
+
+  <.form action="submit" phx-submit="encode" class="flex">
+    <.input type="text" name="long_url" value="" class="outline-none " />
+
+    <button class="bg-black text-white font-bold px-5">Shortner</button>
+  </.form>
+
+  <h2>short_url</h2>
+  <a class="bg-black px-2 py-3 mt-5">
+    <%= @short_url %>
+  </a>
+</div>

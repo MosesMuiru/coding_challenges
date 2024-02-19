@@ -1,6 +1,6 @@
 defmodule UrlShortner.Url.LongUrl do
   # this is for long url
-  alias UrlShortner.ShortUrl
+  alias UrlShortner.Url.ShortUrl
   import Ecto.Changeset
   use Ecto.Schema
 

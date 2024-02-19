@@ -7,8 +7,8 @@ defmodule UrlShortner.Url.ShortUrl do
 
   schema "shorter_url" do
     field :short, :string
-    belongs_to :short_url, LongUrl
-
+    belongs_to(:long, LongUrl)
+    # belongs_to :short_url, LongerUrl
     timestamps()
     # field :short_url, string
   end
@@ -19,4 +19,3 @@ defmodule UrlShortner.Url.ShortUrl do
     |> validate_required([:short_url])
   end
 end
-  
